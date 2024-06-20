@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.InputMismatchException;
 import java.util.Scanner;
 
+import product.controller.ProductController;
 import product.model.Armor;
 import product.model.Product;
 import product.model.Weapon;
@@ -15,21 +16,21 @@ public class Menu {
 
 		Scanner input = new Scanner(System.in);
 		
-		int option;
+		int option, itemCode, itemType, itemBaseArmorClass;
+		String itemName, itemDescription, itemBaseDamage;
+		float itemPrice;
+		boolean itemAttunementRequired;
 		
-		//testing Product Class
-		Product vorpalSword = new Product(1, 1, "Espada Vorpal", "Decapita em um golpe crítico", 100000, true);
-		Product adamantineArmor = new Product(1, 2, "Armadura de Adamantina", "Torna qualquer golpe crítico um golpe normal", 200000, false);
-		vorpalSword.show();
-		adamantineArmor.show();
+		ProductController products = new ProductController();
 		
-		//testing Weapon Class
+		
 		Product weaponVorpalSword = new Weapon(1, 1, "Espada Vorpal", "Decapita em um golpe crítico", 100000, true, "2d6");
-		weaponVorpalSword.show();
+		products.create(weaponVorpalSword);
 		
-		//testing Armor Class
-		Product armorAdamantineArmor = new Armor(1, 2, "Armadura de Adamantina", "Torna qualquer golpe crítico um golpe normal", 200000, false, 14);
-		armorAdamantineArmor.show();
+		Product armorAdamantineArmor = new Armor(2, 2, "Armadura de Adamantina", "Torna qualquer golpe crítico um golpe normal", 200000, false, 14);
+		products.create(armorAdamantineArmor);
+		
+		products.listAll();
 		
 		while(true) {
 			
@@ -59,10 +60,6 @@ public class Menu {
 				System.out.println(Colors.TEXT_RED_BOLD + "\nDigite números inteiros!\n" + Colors.TEXT_RESET);
 				input.nextLine();
 				
-				// in the cookbook, there was no call for keyPress() or continue, 
-				// it just assigned 0 to option (option = 0).
-				// I chose to call keyPress() and continue to the next iteration of while,
-				// to avoid the processing of the switch case and its triggering of default.
 				keyPress();
 				continue;
 				
@@ -71,31 +68,118 @@ public class Menu {
 			switch(option) {
 			
 			case 1:
-				System.out.println(Colors.TEXT_WHITE + "Cadastrar item\n\n");
+				itemCode = products.generateCode();
+				
+				System.out.println(Colors.TEXT_WHITE + "\nCadastrar item");
+				
+				do {
+					System.out.println(Colors.TEXT_WHITE + "\nDigite o tipo do item a ser cadastrado (1 - Arma | 2 - Armadura):");
+					itemType = input.nextInt();
+					
+				} while (itemType < 1 && itemType > 2);
+				
+				System.out.println(Colors.TEXT_WHITE + "\nDigite o nome do item a ser cadastrado:");
+				input.nextLine();
+				itemName = input.nextLine();
+				
+				System.out.println(Colors.TEXT_WHITE + "\nDescreva o efeito mágico do item a ser cadastrado: ");
+				itemDescription = input.nextLine();
+				
+				System.out.println(Colors.TEXT_WHITE + "\nDigite o preço em Peças de Ouro do item a ser cadastrado: ");
+				itemPrice = input.nextFloat();
+				input.nextLine();
+				
+				System.out.println(Colors.TEXT_WHITE + "\nInforme se o item precisa de sintonização: ");
+				itemAttunementRequired = Boolean.parseBoolean(input.nextLine());
+				
+				switch(itemType) {
+				case 1:
+					System.out.println(Colors.TEXT_WHITE + "\nInforme o dado de dano da arma: ");
+					itemBaseDamage = input.nextLine();
+					
+					products.create(new Weapon(itemCode, itemType, itemName, itemDescription, itemPrice, itemAttunementRequired, itemBaseDamage));
+					break;
+					
+				case 2:
+					System.out.println(Colors.TEXT_WHITE + "\nInforme a CA base da armadura: ");
+					itemBaseArmorClass = input.nextInt();
+					
+					products.create(new Armor(itemCode, itemType, itemName, itemDescription, itemPrice, itemAttunementRequired, itemBaseArmorClass));
+					
+					break;
+				}
 				
 				keyPress();
         		break;
         		
 			case 2:
-				System.out.println(Colors.TEXT_WHITE + "Listar todos os itens\n\n");
+				System.out.println(Colors.TEXT_WHITE + "\nListar todos os itens");
+				products.listAll();
 				
 				keyPress();
         		break;
         		
 			case 3:
-				System.out.println(Colors.TEXT_WHITE + "Buscar item por código\n\n");
+				System.out.println(Colors.TEXT_WHITE + "\nBuscar item por código");
+				System.out.println(Colors.TEXT_WHITE + "\nDigite o código do item que deseja localizar: ");
+				itemCode = input.nextInt();
+				
+				products.searchbyCode(itemCode);
 				
 				keyPress();
         		break;
 				
 			case 4:
-				System.out.println(Colors.TEXT_WHITE + "Atualizar item\n\n");
+				System.out.println(Colors.TEXT_WHITE + "\nAtualizar item");
+				System.out.println(Colors.TEXT_WHITE + "\nDigite o código do item a ser atualizado:");
+				itemCode = input.nextInt();
+				
+				do {
+					System.out.println(Colors.TEXT_WHITE + "\nDigite o tipo do item a ser atualizado (1 - Arma | 2 - Armadura):");
+					itemType = input.nextInt();
+					
+				} while (itemType < 1 && itemType > 2);
+				
+				System.out.println(Colors.TEXT_WHITE + "\nDigite o nome do item a ser atualizado:");
+				input.nextLine();
+				itemName = input.nextLine();
+				
+				System.out.println(Colors.TEXT_WHITE + "\nDescreva o efeito mágico do item a ser atualizado: ");
+				itemDescription = input.nextLine();
+				
+				System.out.println(Colors.TEXT_WHITE + "\nDigite o preço em Peças de Ouro do item a ser atualizado: ");
+				itemPrice = input.nextFloat();
+				input.nextLine();
+				
+				System.out.println(Colors.TEXT_WHITE + "\nInforme se o item precisa de sintonização: ");
+				itemAttunementRequired = Boolean.parseBoolean(input.nextLine());
+				
+				switch(itemType) {
+				case 1:
+					System.out.println(Colors.TEXT_WHITE + "\nInforme o novo dado de dano da arma: ");
+					itemBaseDamage = input.nextLine();
+					
+					products.update(new Weapon(itemCode, itemType, itemName, itemDescription, itemPrice, itemAttunementRequired, itemBaseDamage));
+					break;
+					
+				case 2:
+					System.out.println(Colors.TEXT_WHITE + "\nInforme a nova CA base da armadura: ");
+					itemBaseArmorClass = input.nextInt();
+					
+					products.update(new Armor(itemCode, itemType, itemName, itemDescription, itemPrice, itemAttunementRequired, itemBaseArmorClass));
+					
+					break;
+				}
 				
 				keyPress();
         		break;
         		
 			case 5:
-				System.out.println(Colors.TEXT_WHITE + "Remover item\n\n");
+				System.out.println(Colors.TEXT_WHITE + "\nRemover item");
+				System.out.println(Colors.TEXT_WHITE + "\nDigite o código do item a ser removido: ");
+				itemCode = input.nextInt();
+				
+				products.delete(itemCode);
 				
 				keyPress();
         		break;

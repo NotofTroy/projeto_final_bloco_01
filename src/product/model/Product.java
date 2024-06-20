@@ -1,6 +1,6 @@
 package product.model;
 
-public class Product {
+public abstract class Product {
 	
 	private int code;
 	private int type;
@@ -97,7 +97,7 @@ public class Product {
 		}
 		
 		System.out.println("\n***********************************************************");
-		System.out.println("Mostrando dados do item " + this.code + ":");
+		System.out.println("Mostrando dados do item de código " + this.code + ":");
 		System.out.println("***********************************************************");
 		System.out.println("Nome: " + this.name);
 		System.out.println("Efeito mágico: " + this.description);

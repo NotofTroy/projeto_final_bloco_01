@@ -24,6 +24,6 @@ public class Armor extends Product {
 	public void show() {
 		super.show();
 		
-		System.out.println("Classe de armadura base: " + this.baseArmosClass);
+		System.out.println("Classe de armadura base: " + this.baseArmosClass + "\n");
 	}
 }
