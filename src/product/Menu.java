@@ -1,6 +1,10 @@
 package product;
 
 import java.util.Scanner;
+
+import product.model.Armor;
+import product.model.Product;
+import product.model.Weapon;
 import product.util.Colors;
 
 public class Menu {
@@ -10,6 +14,20 @@ public class Menu {
 		Scanner input = new Scanner(System.in);
 		
 		int option;
+		
+		//testing Product Class
+		Product vorpalSword = new Product(1, 1, "Espada Vorpal", "Decapita em um golpe crítico", 100000, true);
+		Product adamantineArmor = new Product(1, 2, "Armadura de Adamantina", "Torna qualquer golpe crítico um golpe normal", 200000, false);
+		vorpalSword.show();
+		adamantineArmor.show();
+		
+		//testing Weapon Class
+		Product weaponVorpalSword = new Weapon(1, 1, "Espada Vorpal", "Decapita em um golpe crítico", 100000, true, "2d6");
+		weaponVorpalSword.show();
+		
+		//testing Armor Class
+		Product armorAdamantineArmor = new Armor(1, 2, "Armadura de Adamantina", "Torna qualquer golpe crítico um golpe normal", 200000, false, 14);
+		armorAdamantineArmor.show();
 		
 		while(true) {
 			
