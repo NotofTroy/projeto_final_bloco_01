@@ -1,5 +1,7 @@
 package product;
 
+import java.io.IOException;
+import java.util.InputMismatchException;
 import java.util.Scanner;
 
 import product.model.Armor;
@@ -48,34 +50,54 @@ public class Menu {
 			System.out.println("*****************************************************");
 			System.out.println("Insira a opção desejada:                             ");
 			System.out.println("                                                     " + Colors.TEXT_RESET);
-
-			option = input.nextInt();
+			
+			try {
+				option = input.nextInt();
+				
+			} catch(InputMismatchException e) {
+				
+				System.out.println(Colors.TEXT_RED_BOLD + "\nDigite números inteiros!\n" + Colors.TEXT_RESET);
+				input.nextLine();
+				
+				// in the cookbook, there was no call for keyPress() or continue, 
+				// it just assigned 0 to option (option = 0).
+				// I chose to call keyPress() and continue to the next iteration of while,
+				// to avoid the processing of the switch case and its triggering of default.
+				keyPress();
+				continue;
+				
+			}
 			
 			switch(option) {
 			
 			case 1:
 				System.out.println(Colors.TEXT_WHITE + "Cadastrar item\n\n");
 				
+				keyPress();
         		break;
         		
 			case 2:
 				System.out.println(Colors.TEXT_WHITE + "Listar todos os itens\n\n");
 				
+				keyPress();
         		break;
         		
 			case 3:
 				System.out.println(Colors.TEXT_WHITE + "Buscar item por código\n\n");
 				
+				keyPress();
         		break;
 				
 			case 4:
 				System.out.println(Colors.TEXT_WHITE + "Atualizar item\n\n");
 				
+				keyPress();
         		break;
         		
 			case 5:
 				System.out.println(Colors.TEXT_WHITE + "Remover item\n\n");
 				
+				keyPress();
         		break;
         		
 			case 6:
@@ -89,11 +111,14 @@ public class Menu {
 			default:
 				System.out.println(Colors.TEXT_RED_BOLD + "\nOpção Inválida!\n" + Colors.TEXT_RESET);
 				
+				keyPress();
 				break;
 			}
 		}
 	}
 	
+
+
 	public static void about() {
 		
 		System.out.println("\n*****************************************************************");
@@ -101,5 +126,18 @@ public class Menu {
 		System.out.println("Helena Cristina Souto Fonseca - helenacsfonseca@hotmail.com");
 		System.out.println("https://github.com/NotofTroy");
 		System.out.println("*****************************************************************");
+	}
+	
+	private static void keyPress() {
+		
+		try {
+
+			System.out.println(Colors.TEXT_RESET + "\nPressione Enter para Continuar.");
+			System.in.read();
+
+		} catch (IOException e) {
+
+			System.out.println(Colors.TEXT_RED_BOLD + "\nPressione somente enter" + Colors.TEXT_RESET);
+		}
 	}
 }
